@@ -281,15 +281,222 @@ full_sample %>%
 
 
 
-#We begin by creating some data in a tibble
-tib_t <- tibble(Group = c(rep("Group1", times = 30), rep("Group2", times = 30)),
-                Scores = c(rnorm(n = 30, mean = 450, sd = 50), rnorm(n = 30, mean = 550, sd = 50))
-)
 
-tib_t %$%
-  t.test(Scores ~ Group)
 
-mod1 <- tib_t %$%
-  lm(Scores ~ Group)
 
-summary(mod1)
+ggplot(data = tibble(x = 150:190), aes(x = x)) +
+  stat_function(fun = dnorm, args = list(mean = 170.3, sd = 6.3)) +
+  scale_x_continuous(breaks = c(150, 160, 170, 180, 190)) +
+  annotate(geom = "point", x = 170.3, y = 0, color = "red", size = 6, shape = 18) +
+  theme_bw() +
+  theme(text = element_text(size = 15),
+        axis.title = element_blank(),
+        axis.line.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        panel.grid = element_blank(), 
+        panel.border = element_blank(),
+        axis.line.x = element_line(colour = "black", size = 0.5, linetype = "solid")
+        )
+
+
+ggplot(data = tibble(x = 150:190), aes(x = x)) +
+  stat_function(fun = dnorm, args = list(mean = 170.3, sd = 6.3)) +
+  stat_function(fun = dnorm, args = list(mean = 170.3, sd = 6.3), geom = "area", xlim = c(158, 183)) +
+  scale_x_continuous(breaks = c(150, 160, 170, 180, 190)) +
+  theme_bw() +
+  theme(text = element_text(size = 15),
+        axis.title = element_blank(),
+        axis.line.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        panel.grid = element_blank(), 
+        panel.border = element_blank(),
+        axis.line.x = element_line(colour = "black", size = 0.5, linetype = "solid")
+        )
+
+
+
+ggplot(data = tibble(x = 0:100), aes(x = x)) +
+  stat_function(fun = dnorm, args = list(mean = 50, sd =10), aes(color = "10")) +
+  stat_function(fun = dnorm, args = list(mean = 50, sd =15), aes(color = "20")) +
+  labs(x = expression(paste("Normal with ", mu, " = 50"))) +
+  scale_color_manual(name = "SD", values = c("red", "blue")) +
+  theme_bw() +
+  theme(legend.position = c(0.85,0.8), 
+        text = element_text(size = 15),
+        axis.title.y = element_blank(),
+        axis.line.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        panel.grid = element_blank(), 
+        panel.border = element_blank(),
+        axis.line.x = element_line(colour = "black", size = 0.5, linetype = "solid")
+        )
+
+
+ggplot(data = tibble(x = 0:100), aes(x = x)) +
+  stat_function(fun = dnorm, args = list(mean = 40, sd =15), aes(color = "40")) +
+  stat_function(fun = dnorm, args = list(mean = 60, sd =15), aes(color = "60")) +
+  labs(x = expression(paste("Normal with ", sigma, " = 15"))) +
+  scale_color_manual(name = "Mu", values = c("red", "blue")) +
+  theme_bw() +
+  theme(legend.position = c(0.85,0.8), 
+        text = element_text(size = 15),
+        axis.title.y = element_blank(),
+        axis.line.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        panel.grid = element_blank(), 
+        panel.border = element_blank(),
+        axis.line.x = element_line(colour = "black", size = 0.5, linetype = "solid"))
+
+
+ggplot(data = tibble(x = 80:220), aes(x = x)) +
+  stat_function(fun = dnorm, args = list(mean = 170, sd = 20), aes(color = "170")) +
+  stat_function(fun = dnorm, args = list(mean = 150, sd = 20), aes(color = "150")) +
+  scale_color_manual(values = c("red", "blue")) +
+  theme_bw() +
+  theme(text = element_text(size = 15),
+        axis.title = element_blank(),
+        axis.line.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        panel.grid = element_blank(), 
+        panel.border = element_blank(),
+        axis.line.x = element_line(colour = "black", size = 0.5, linetype = "solid"),
+        legend.position = "none"
+        )
+
+
+
+ggplot(data = tibble(x = rnorm(n = 40, mean = 170.3, sd = 6.3)), aes(x = x)) +
+  geom_histogram(aes(y = ..density..), binwidth = 2, fill = "white", color = "black") +
+  geom_density() +
+  theme_bw() +
+  theme(text = element_text(size = 15),
+        axis.title = element_blank(),
+        axis.line.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        panel.grid = element_blank(), 
+        panel.border = element_blank(),
+        axis.line.x = element_line(colour = "black", size = 0.5, linetype = "solid")
+        )
+
+
+
+samp_mu <- numeric(length = 1000)
+samp_sd <- numeric(length = 1000)
+
+for(i in 1:1000) {
+  x <- rnorm(n = 40, mean = 170.3, sd = 6.3)
+  samp_mu[i] <- mean(x)
+  samp_sd[i] <- sd(x)
+  }
+
+
+ggplot(data = tibble(mean = samp_mu), aes(x = mean)) +
+  geom_histogram(aes(y = ..density..), binwidth = 0.25, color = "black", fill = "white") +
+  geom_density() +
+  theme_bw() +
+  theme(text = element_text(size = 15),
+        axis.title = element_blank(),
+        axis.line.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        panel.grid = element_blank(), 
+        panel.border = element_blank(),
+        axis.line.x = element_line(colour = "black", size = 0.5, linetype = "solid")
+        )
+  
+
+
+
+
+
+ggplot(data = tibble(x = -4:4), aes(x = x)) +
+  stat_function(fun = dnorm, args = list(mean = 0, sd = 1)) +
+  annotate(geom = "point", x = 1.75, y = 0, size = 4, shape = 18, color = "red") +
+  geom_segment(aes(x = 0, xend = 0, y = 0, yend = 0.4), linetype = "dashed") +
+  theme_bw() +
+  labs(x = "H0 distribution") +
+  theme(text = element_text(size = 15),
+        axis.title.y = element_blank(),
+        axis.line.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        panel.grid = element_blank(), 
+        panel.border = element_blank(),
+        axis.line.x = element_line(colour = "black", size = 0.5, linetype = "solid")
+        )
+
+#Solve where 97.5% is so we can split 
+qt(p = 0.975, df = 28)
+
+ggplot(data = tibble(x = -4:4), aes(x = x)) +
+  stat_function(fun = dt, args = list(df = 28)) +
+  stat_function(fun = dt, args = list(df = 28), geom = "area", xlim = c(-4, -2)) +
+  stat_function(fun = dt, args = list(df = 28), geom = "area", xlim = c(2, 4)) +
+  labs(x = "t distribution") +
+  theme_bw() +
+  theme(text = element_text(size = 15),
+        axis.title.y = element_blank(),
+        axis.line.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        axis.text.y = element_blank(),
+        panel.grid = element_blank(), 
+        panel.border = element_blank(),
+        axis.line.x = element_line(colour = "black", size = 0.5, linetype = "solid")
+        )
+
+
+
+ggplot(data = tibble(x = 0:5, y = 0:5), aes(x = x, y = y)) + 
+  geom_segment(aes(x = 0, y = 0.8, xend = 4.5, yend = 5)) +
+  expand_limits(x = 0, y = 0) +
+  scale_x_continuous(expand = c(0, 0), limits = c(0, 5)) + 
+  scale_y_continuous(expand = c(0, 0)) +
+  theme_bw() +
+  theme(text = element_text(size = 15),
+        axis.title = element_blank(),
+        panel.grid = element_blank(), 
+        panel.border = element_blank(),
+        axis.line.y = element_line(colour = "black", size = 0.5, linetype = "solid"),
+        axis.line.x = element_line(colour = "black", size = 0.5, linetype = "solid")
+        )
+
+
+
+dat <- tibble(Control = rnorm(n = 30, mean = 550, sd = 30),
+              Experiment = rnorm(n = 30, mean = 500, sd = 30)
+              )
+
+dat %>% 
+  summarize(across(.fns = c(mean, sd)))
+
+ 
+dat <- dat %>% 
+  pivot_longer(cols = everything(), names_to = "Group", values_to = "RT")
+
+
+
+dat %>% 
+  ggplot(aes(x = Group, y = RT)) +
+  geom_point() +
+  stat_summary(fun = "mean", geom = "errorbar", aes(ymax = ..y.., ymin = ..y..), color = "red") +
+  scale_y_continuous(breaks = seq(420, 620, by = 20)) +
+  geom_segment(aes(x = 1, xend = 2, y = 545, yend = 495), color = "blue", ) +
+  theme_bw() +
+  theme(text = element_text(size = 15),
+        axis.title = element_blank(),
+        panel.grid = element_blank(), 
+        panel.border = element_blank(),
+        axis.line.y = element_line(colour = "black", size = 0.5, linetype = "solid"),
+        axis.line.x = element_line(colour = "black", size = 0.5, linetype = "solid")
+        )
+
+dat %$% t.test(RT ~ Group)
+dat_sum <- lm(RT ~ 1 + Group, data = dat)
+summary(dat_sum)
+
